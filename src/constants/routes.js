@@ -4,5 +4,6 @@ export const routes={
     home: 'Home',
     add: 'Add',
     allUSers: 'AllUsers',
-    search: 'Search'
+    search: 'Search',
+    details:'Details',
 }

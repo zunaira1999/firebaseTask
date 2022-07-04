@@ -11,6 +11,7 @@ import Home from '../../screens/dashboard/home/Home';
 import Add from '../../screens/dashboard/add/Add';
 import AllUsers from '../../screens/dashboard/allUsers/AllUsers';
 import Search from '../../screens/dashboard/search/Search';
+import Details from '../../screens/auth/signIn/Details';
 
 
 const Stack = createNativeStackNavigator()
@@ -26,13 +27,14 @@ const AuthNavigation = () => {
             
         />
 
-        <Stack.Navigator  screenOptions={{headerShown:false , animation: 'slide_from_bottom'  }} >
+        <Stack.Navigator   screenOptions={{headerShown:false , animation: 'slide_from_bottom'  }} >
             <Stack.Screen name={routes.signin} component={SignIn} />
             <Stack.Screen name={routes.otp} component={VerifyOTP} />
             <Stack.Screen name={routes.home} component={Home} />
             <Stack.Screen name={routes.add} component={Add} />
             <Stack.Screen name={routes.allUSers} component={AllUsers} />
             <Stack.Screen name={routes.search} component={Search} />
+            <Stack.Screen name={routes.details} component={Details} />
 
         </Stack.Navigator>
         </>

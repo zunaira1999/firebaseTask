@@ -10,18 +10,22 @@ const InputField = ({
     placeholder,
     value,
     onChangeText,
-    maxLength
+    maxLength,
+    selectTextOnFocus,
+    editable
 }) => {
     return (
         <View style={styles.container}>
             <TextInput 
-                placeholderTextColor={colors.gray}
+                placeholderTextColor={'lightgray'}
                 value={value}
                 onChangeText={onChangeText}
                 placeholder={placeholder}
                 keyboardType={keyboardType}
                 maxLength={maxLength}
+                editable={editable} selectTextOnFocus={selectTextOnFocus}
                 style={styles.inputText} />
+                
         </View>
     );
 };

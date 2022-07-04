@@ -5,15 +5,16 @@ import { colors } from '../../../constants/colors';
 import { routes } from '../../../constants/routes';
 
 // create a component
-const Home = ({navigation}) => {
+const Home = ({navigation,route}) => {
+    const { myName, phoneNumber,uid } = route.params;
     return (
         <View style={styles.container}>
             <View style={styles.content}>
                 <TouchableOpacity
-                    onPress={()=>navigation.navigate(routes.add)}
+                    onPress={()=>navigation.navigate(routes.add,{myName,phoneNumber,uid})}
                     // disabled={disabled}
                     style={styles.btnContainer}>
-                    <Text style={styles.text}>Add </Text>
+                    <Text style={styles.text}>User Profile </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -24,7 +25,7 @@ const Home = ({navigation}) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={()=>navigation.navigate(routes.search)}
+                    onPress={()=>navigation.navigate(routes.search,{myName,phoneNumber,uid})}
                     // disabled={disabled}
                     style={styles.btnContainer}>
                     <Text style={styles.text}>Search </Text>
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
         borderColor: colors.black,
         height: 40,
         marginHorizontal: 30,
+        backgroundColor:'white',
         marginBottom:20,
         justifyContent: 'center',
         // alignItems:'center',

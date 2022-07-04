@@ -1,16 +1,64 @@
 //import liraries
-import React, { useState } from 'react';
-import { View, Text, StyleSheet,Platform ,Image, TouchableOpacity } from 'react-native';
-import { profile } from '../../../assets';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, Alert, SnapshotViewIOSBase } from 'react-native';
+import { profile, logout } from '../../../assets';
 import { colors } from '../../../constants/colors';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
 
 import storage from '@react-native-firebase/storage';
+
 import ImagePicker from 'react-native-image-crop-picker';
+import { routes } from '../../../constants/routes';
 
 // create a component
-const Add = () => {
+const Add = ({ navigation, route, cardIndex }) => {
+    // const user_name = navigation.getParam('userName');
+    const { myName, phoneNumber, uid } = route.params;
+    const [nameExist,setNameExist] = useState()
+    const [list, setList] = useState('')
+    // console.log(route)
+    const [url, setUrl] = useState()
     const [image, setImage] = useState(null)
     const [uploading, setUploading] = useState(false)
+
+    useEffect(() => {
+        getDatabase();
+    }, [])
+
+    const getDatabase = async () => {
+        try {
+
+
+            // const index = list.length
+            // const data = await database().ref('todo').once('value');
+            const data = await 
+            database()
+            .ref(`users`)
+            .child(auth().currentUser.uid)
+            .once('value', snapshot=> {
+                 if(snapshot.exists()){
+                    let newnam =snapshot.val().myName
+
+                    setNameExist(newnam)
+                    console.log('name = ', newnam)
+                 }
+            })
+            
+            
+            
+            // tempData => {
+
+            //     setList(tempData.val());
+                
+                console.log( data)
+            // })
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
 
     const choosePhotoFromGallery = () => {
         ImagePicker.openPicker({
@@ -24,24 +72,139 @@ const Add = () => {
             console.log(imagUri)
         });
     }
-    const StoreUser= async()=>{
+
+
+    // useEffect(() => {
+    //     getIamge();
+    // }, [])
+
+
+    // const getIamge = async () => {
+    //     try {
+    //         const imgurl = await storage().ref(`/d5760d3d-757b-4707-9392-5a7ffa4b6eed.jpg`).getDownloadURL()
+    //         console.log(url)
+    //         setUrl(imgurl)
+    //         // const storage=getStorage()       
+    //         // const refrence= ref(storage,'/d5760d3d-757b-4707-9392-5a7ffa4b6eed.jpg')
+    //         // await getDownloadURL(refrence).then((x)=>{
+    //         //     setUrl(x)
+    //         // }) 
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+
+
+    // }
+
+
+    const StoreUser = async () => {
         const uploadUri = image;
-    let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1)
+        //   let imageUri =   setImage({uri: uploadUri.uri})
 
-    setUploading(true)
+        let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1)
 
-    try {
-      await storage().ref(filename).putFile(uploadUri)
-      setUploading(false)
-      Alert.alert(
-        'Image Uploaded',
-        'Your image has been uploaded to the firebase cloud storage Successfully!'
-      )
-    } catch (e) {
-      console.log(e)
+        setUploading(true)
+
+        try {
+            // const index = list.length
+            // .child(auth().currentUser.uid)
+            await storage().ref(filename).putFile(uploadUri)
+            setUploading(false)
+
+
+            const n = await database().ref('users')
+                .child(auth().currentUser.uid)
+                .once('value', snapshot => {
+                    if (snapshot.exists()) {
+                        console.log(snapshot.val())
+                       let nam = snapshot.val().myName
+                       setNameExist(nam)
+                       console.log('user name', nameExist)
+                        if (nam) 
+                        {
+                            const response = database().ref(`users`)
+                                .child(auth().currentUser.uid).update({
+                                    // myName: nam,
+                                    // phoneNumber,
+                                    imageURL: image ? image : '' ,
+                                    // userId: auth().currentUser.uid
+                                    //  filename
+                                })
+                                console.log(response)
+                                Alert.alert(
+                                    'User Saved',
+                                    'User has been store to the real time database Successfully!'
+                                )
+                                
+                        }
+
+
+
+                        console.log(nam)
+                    } else {
+                        
+                        const response =  database().ref(`users`)
+                            .child(auth().currentUser.uid).update({
+                                myName,
+                                phoneNumber,
+                                imageURL: image ? image :'',
+                                userId: auth().currentUser.uid,
+                               
+                                //  filename
+                            })
+                            console.log(response)
+                            Alert.alert(
+                                'User Saved',
+                                'User has been store to the real time database Successfully!'
+                            )
+                    }
+
+                })
+
+
+            // const response = await database().ref(`users/${index}`).set({
+            // const response = await database().ref(`users`)
+            //     .child(auth().currentUser.uid).set({
+            //         myName,
+            //         phoneNumber,
+            //         imageURL: image,
+            //         userId: uid
+            //         //  filename
+            //     })
+
+
+
+
+            // Alert.alert(
+            //     'User Saved',
+            //     'User has been store to the real time database Successfully!'
+            // )
+            // console.log(response)
+            // navigation.navigate(routes.details,{ image: `${imageURL}` })
+        } catch (e) {
+            console.log(e)
+        }
+
+        //   await storage().ref(filename).putFile(uploadUri)
+        //   setUploading(false)
+        //   Alert.alert(
+        //     'Image Uploaded',
+        //     'Your image has been uploaded to the firebase cloud storage Successfully!'
+        //   )
+        // } catch (e) {
+        //   console.log(e)
+        // }
+
+        // setImage(null)
+
+
     }
+    const userSignout = () => {
+        auth()
+            .signOut()
+            .then(() => console.log('User signed out!'));
 
-    setImage(null)
+        navigation.navigate(routes.signin)
     }
     return (
         <View style={styles.container}>
@@ -65,29 +228,42 @@ const Add = () => {
 
             </TouchableOpacity>
             <View style={styles.textContainer}>
-                <Text style={styles.text}>Name: </Text>
-                <Text style={styles.text}>UserName </Text>
+                <Text style={styles.text}>Name:  </Text>
+
+                <Text style={styles.text}>{myName ? myName : nameExist}  </Text>
 
             </View>
 
             <View style={styles.textContainer}>
                 <Text style={styles.text}>Phone Number: </Text>
-                <Text style={styles.text}>012345689 </Text>
+                <Text style={styles.text}>{phoneNumber} </Text>
 
             </View>
-                <View style={{
-                    justifyContent:'flex-end',
-                    flex:0.6
-                }}>
-                <TouchableOpacity
-                onPress={StoreUser}
-                // disabled={disabled}
-                style={styles.btnContainer}>
-                <Text style={styles.btnText}>Store User</Text>
-            </TouchableOpacity>
 
-                </View>
-            
+
+            <View style={{
+                justifyContent: 'flex-end',
+                flex: 0.6,
+                paddingVertical: 10,
+            }}>
+                <TouchableOpacity
+                    onPress={StoreUser}
+                    // disabled={disabled}
+                    style={styles.btnContainer}>
+                    <Text style={styles.btnText}>Update User</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => userSignout()}
+                    style={[styles.btnContainer, { marginTop: 10 }]}>
+                    <Text style={styles.btnText}>Logout</Text>
+                </TouchableOpacity>
+
+
+            </View>
+
+
+
         </View>
     );
 };
@@ -121,6 +297,7 @@ const styles = StyleSheet.create({
         // flex: 1,
         borderWidth: 1,
         borderColor: colors.black,
+        backgroundColor:'white',
         height: 40,
         marginHorizontal: 30,
         justifyContent: 'center',

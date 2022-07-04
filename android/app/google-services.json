@@ -1,18 +1,27 @@
 {
   "project_info": {
     "project_number": "716071987503",
+    "firebase_url": "https://fir-task-cb708-default-rtdb.firebaseio.com",
     "project_id": "fir-task-cb708",
     "storage_bucket": "fir-task-cb708.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:716071987503:android:9cacdb62bcf27310fd19da",
+        "mobilesdk_app_id": "1:716071987503:android:6a43dc9c1a077650fd19da",
         "android_client_info": {
           "package_name": "com.firebasetask"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "716071987503-dai3l3qsej7925g84tub8igoed0vpm0k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.firebasetask",
+            "certificate_hash": "39b7929e55afcbed8da06d477bbe61c52e4f6323"
+          }
+        },
         {
           "client_id": "716071987503-b36pkkoc8jjiqdt7c1qa1g8lu2ppjg06.apps.googleusercontent.com",
           "client_type": 3
