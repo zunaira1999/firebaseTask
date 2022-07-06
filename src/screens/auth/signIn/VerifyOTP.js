@@ -30,23 +30,7 @@ const VerifyOTP = (
     const [code, setCode] = useState('');
     const [list, setList] = useState('')
 
-    // useEffect(() => {
-    //     getDatabase();
-    // }, [])
-
-
-    // const getDatabase = async () => {
-    //     try {
-    //         const data = await 
-    //         database()
-    //         .ref('todo')
-    //         .child(auth.currentUser.uid)
-    //         .on('value',)
-            
-    //     } catch (e) {
-    //         console.log(e)
-    //     }
-    // }
+   
 
     const confirmCode = async () => {
        
@@ -58,17 +42,12 @@ const VerifyOTP = (
             setISLoading(false)
             const n = await database().ref('users')
                 .child(auth().currentUser.uid)
-                // .orderByChild('phoneNmuber')
-                // .equalTo(phoneNumber)
                 .once('value',snapshot=>{
                     if(snapshot.exists()){
                         let num= snapshot.val().phoneNumber
                         if(num == phoneNumber){
                         navigation.navigate(routes.home, {  confirm : 'confirm', phoneNumber })
                        }
-                    //    else{
-                    //     navigation.navigate(routes.details, { confirm :'confirm' , phoneNumber })
-                    //    }
                     }else{
                         navigation.navigate(routes.details, { confirm :'confirm' , phoneNumber })
                         const response =  database().ref(`users`)
@@ -81,19 +60,11 @@ const VerifyOTP = (
                             //  filename
                         })
                         console.log(response)
-                        Alert.alert(
-                            'User Saved',
-                            'User has been store to the real time database Successfully!'
-                        )
+                        
                        
                         console.log(num)
                     }
                 })
-                // navigation.navigate(routes.details, { confirm :'confirm' , phoneNumber })
-                       
-                       
-                //         console.log(num)
-            // navigation.navigate(routes.details, { 'confirm': confirm, phoneNumber })
         } catch (error) {
             setISLoading(false)
             showMessage({
@@ -103,9 +74,6 @@ const VerifyOTP = (
             console.log(error);
             setISLoading(false)
         }
-        // if (code.length > 0) {
-           
-        // }
 
     }
 

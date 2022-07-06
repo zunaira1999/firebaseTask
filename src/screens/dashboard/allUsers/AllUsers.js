@@ -7,8 +7,10 @@ import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
 // create a component
-const AllUsers = () => {
+const AllUsers = ({ route }) => {
     const [list, setList] = useState([])
+    const [value, setValue] = useState('')
+    const [result, setResult] = useState([])
 
     useEffect(() => {
         getDatabase();
@@ -18,34 +20,38 @@ const AllUsers = () => {
         try {
 
             const data = await database().ref(`users`)
-            .on("value",snapShot=>{
-                let ar = [];
-                if(snapShot.exists()){
-                    snapShot.forEach((item,inx)=>{
-                        ar.push(item)
-                        console.log(ar)
-                     
-                    })
-                   
-                    // console.log(ar)
-                }
-                setList(ar)
-            })
-        
-            // const data = await database().ref(`users`).once("value"
-            // , 
-            // tempData => {
+                .on("value", snapShot => {
+                    let ar = [];
+                    if (snapShot.exists()) {
 
-            //     setList(tempData.val());
-            //     console.log(data)
-            // })
-            // setList(data.val());
-            // console.log(data)
+
+                        snapShot.forEach((item, inx) => {
+                            ar.push(item)
+                            console.log(ar)
+
+                        })
+
+                    }
+                    setList(ar)
+                })
+
+
         } catch (e) {
             console.log(e)
         }
     }
-console.log('   setList(arr)',list);
+    console.log('   setList(arr)', list);
+
+    const searchName = () => {
+        let newlist = list
+        let searchdata = list.filter((item) => {
+            return item = myName
+
+
+        })
+
+        console.log('list is here', searchdata);
+    }
     return (
         <View style={styles.container}>
             <View style={{
@@ -53,15 +59,23 @@ console.log('   setList(arr)',list);
 
             }}>
                 <View>
-                <TextInput
-                    style={styles.inputText}
-                    placeholderTextColor={colors.gray}
-                    placeholder={'Search user'}
+                    <TextInput
+                        style={styles.inputText}
+                        placeholderTextColor={colors.gray}
+                        placeholder={'Search user'}
+                        onChangeText={(e) => setValue(e)}
+                        value={value}
+                    />
 
-                />
-                
                 </View>
-                
+                {
+                    result.map((result, index) => {
+                        <Text style={{ color: 'black' }}>
+                            {result}
+                        </Text>
+                    })
+                }
+
                 <View style={styles.cardContainer}>
                     <Text style={{
                         color: 'gray',
@@ -69,53 +83,36 @@ console.log('   setList(arr)',list);
                         fontWeight: 'bold',
                         paddingHorizontal: 10
                     }}>All Users</Text>
-{/* 
-                    <TouchableOpacity
+                   
+                    <FlatList data={list.filter(ii =>
+                        value !== ''
+                            ? ii?._snapshot?.value?.myName
+                                .toLocaleLowerCase()
+                                .includes(value.toLocaleLowerCase())
+                            : ii,
+                    )}
 
-                        style={styles.card}> */}
-                        {/* <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-                            ID: {list.userId}
-                        </Text> */}
-                        {/* <Image 
-                                        style={{height:50,width:50,resizeMode:'contain' }}
-                                        source={item.item.imageURL}
-                                       /> */}
-                        {/* <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-
-                            Name :{list.myName}
-                        </Text>
-
-                        <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-                            Phone Number:  {list.phoneNumber}
-                        </Text>
-
-                    </TouchableOpacity> */}
-
-                    <FlatList data={list}
                         renderItem={item => {
                             const cardIndex = item.index
                             if (item.item !== null) {
-                                const { item:{_snapshot:{value,key}} } = item
-                                return <TouchableOpacity 
-                                   
+                                const { item: { _snapshot: { value, key } } } = item
+                                return <TouchableOpacity
+
                                     style={styles.card}>
-                                        {
-                                            console.log(item)
-                                        }
-                                        <View style={{flexDirection:'row',}}>
-                                        <Text style={{ color: '#F9F9F9', fontSize: 16, paddingHorizontal:10,fontWeight: 'bold' }}>Image: </Text>
-                                    <Image style={{height:50,width:50}} source={{uri: value.imageURL}} />
-                                        </View>
-                                       {/* <Text style={{color:'#F9F9F9', fontSize: 16 ,fontWeight:'bold'}}>
-                                          ID: {key}
-                                        </Text>  */}
-                                      
-                                    <Text style={{ color:'#F9F9F9', fontSize: 16 ,fontWeight:'bold'}}>
-                                      
+                                    {
+                                        console.log(item)
+                                    }
+                                    <View style={{ flexDirection: 'row', }}>
+                                        <Text style={{ color: '#F9F9F9', fontSize: 16, paddingHorizontal: 10, fontWeight: 'bold' }}>Image: </Text>
+                                        <Image style={{ height: 50, width: 50 }} source={{ uri: value.imageURL }} />
+                                    </View>
+
+                                    <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
+
                                         Name :{value.myName}
                                     </Text>
 
-                                    <Text style={{ color:'#F9F9F9', fontSize: 16 ,fontWeight:'bold'}}>
+                                    <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
                                         Phone Number:  {value.phoneNumber}
                                     </Text>
 
@@ -125,8 +122,6 @@ console.log('   setList(arr)',list);
                         }}
 
                     />
-
-
                 </View>
             </View>
         </View>

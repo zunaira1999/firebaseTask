@@ -1,7 +1,7 @@
 //import liraries
 import React, { useEffect, useState } from 'react';
 import {
-    View, Text, StyleSheet, TextInput, Image,
+    View, Text, StyleSheet, TextInput, Image,  
     FlatList, TouchableOpacity, Alert, ScrollView
 } from 'react-native';
 import { colors } from '../../../constants/colors';
@@ -13,18 +13,16 @@ import auth from '@react-native-firebase/auth';
 // create a component
 const Search = ({ route, userName }) => {
     const { myName, uid, phoneNumber } = route.params
+    const [ picked, setPicked ] = useState(false);
     const [list, setList] = useState([])
     const [search, setSearch] = useState("")
-    const [refresh,setrefresh] = useState(true)
+    const [refresh, setrefresh] = useState(true)
     const [url, setUrl] = useState()
     // console.log(myName)
     useEffect(() => {
         getDatabase();
     }, [])
 
-    // useEffect(()=>{
-    //     getIamge();
-    // },[])
 
     const getDatabase = async () => {
         try {
@@ -38,35 +36,15 @@ const Search = ({ route, userName }) => {
 
                         })
 
-                        // console.log(ar)
                     }
                     setList(ar)
                 })
-            // console.log(data.length)
-            // setList(data.val());
-            // console.log(data)
-
         } catch (e) {
             console.log(e)
         }
     }
-    // const getIamge = async()=>{
-    //         try {
-    //             const imgurl = await storage().ref('d9c88bed-9803-4dab-9137-a37c0ca33795.jpg').getDownloadURL()
-    //             console.log(url)
-    //             setUrl(imgurl)
-    //             // const storage=getStorage()       
-    //             // const refrence= ref(storage,'/d5760d3d-757b-4707-9392-5a7ffa4b6eed.jpg')
-    //             // await getDownloadURL(refrence).then((x)=>{
-    //             //     setUrl(x)
-    //             // }) 
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-
-
-    // }
-
+    
+    
 
 
     const handleLongPress = (key, cardValue) => {
@@ -96,31 +74,23 @@ const Search = ({ route, userName }) => {
 
         const n = database()
             .ref('users')
-           .orderByChild("myName")
-           .equalTo(search)
+            .orderByChild("myName")
+            .equalTo(search)
             .on('value', snapshot => {
-                console.log('snap',snapshot,list)
+                console.log('snap', snapshot, list)
                 if (snapshot.exists()) {
                     console.log('user Found', Object.values(snapshot.val()))
                     setList([snapshot])
-                    // console.log('dataaa' ,setList([snapshot]))
                     setrefresh(false)
                     setTimeout(() => {
                         setrefresh(true)
                     }, 100);
-                    // setSearch(Object.values(snapshot.val()))
                 }
                 else {
                     console.log('user not exist')
                     Alert.alert('Alert', 'User not exist')
-                    // setSearch('User Not found')
                 }
             })
-        // const searchdata = await database().ref(`users`).orderByChild(`myName`).equalTo(myName).on('value');
-
-        // setSearch(searchdata)
-        // console.log(searchdata)
-        // setList(list.filter(name=>name.match(val) == myName))
     }
     return (
         <View style={styles.container}>
@@ -143,14 +113,14 @@ const Search = ({ route, userName }) => {
                             backgroundColor: 'black',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            marginTop:10,
-                            height:40,
-                            borderRadius:10,
+                            marginTop: 10,
+                            height: 40,
+                            borderRadius: 10,
                             paddingHorizontal: 5,
                             // marginRight: 20
-                            marginLeft:10,
+                            marginLeft: 10,
                         }}>
-                        <Text style={{ color: 'white',fontSize:12 }}>
+                        <Text style={{ color: 'white', fontSize: 12 }}>
                             Search
                         </Text>
                     </TouchableOpacity>
@@ -166,52 +136,49 @@ const Search = ({ route, userName }) => {
                     }}>Users List</Text>
                     {
                         search ?
-                     <FlatList data={list}
-                                style={{ height: 530 }}
+                            <FlatList data={list}
+                            
+                                style={[{ height: 620 }]}
                                 showsVerticalScrollIndicator={false}
                                 renderItem={item => {
-
+                                    
                                     if (item.item !== null) {
-                                        const { item: { _snapshot: { myName, phoneNumber,imageURL,key,value} } } = item
+                                        const { item: { _snapshot: { myName, phoneNumber, imageURL, key, value } } } = item
                                         {
-                                                console.log('value',value.myName,myName)
-                                            }
-                                        // const {index} = cardIndex111
-                                        // const cardIndex = index
+                                            console.log('value is', value.myName, myName)
+                                        }
                                         return <TouchableOpacity
                                             onLongPress={() => handleLongPress(key, myName)}
-                                            style={styles.card}>
+                                            style={[styles.card]}>
                                             {
-                                                console.log(item)
+                                                console.log('data item' ,item)
                                             }
                                             <View style={{ flexDirection: 'row', }}>
                                                 <Text style={{ color: '#F9F9F9', fontSize: 16, paddingHorizontal: 10, fontWeight: 'bold' }}>Image: </Text>
-                                                <Image style={{ height: 50, width: 50 }} source={{ uri: imageURL ? imageURL:value[Object.keys(value)[0]].imageURL }} />
+                                                <Image style={{ height: 50, width: 50 }} source={{ uri: value.imageURL ? value.imageURL : value[Object.keys(value)[0]].imageURL }} />
                                             </View>
 
-                                            {/* <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-                                        ID: {key}
-                                    </Text> */}
                                             <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
                                                 {
-                                                    console.log( value[Object.keys(value)[0]].myName ,'test',(myName != undefined && myName ? "aldsfjal": value.myName))
+                                                    console.log(value[Object.keys(value)[0]].myName, 'test', (myName != myName && myName ? myName : value.myName))
                                                 }
-                                                Name:{ myName ? myName: value[Object.keys(value)[0]].myName}
+                                                Name:{value.myName ? value.myName : value[Object.keys(value)[0]].myName}
                                             </Text>
 
                                             <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-                                                Phone Number:  {phoneNumber?phoneNumber: value[Object.keys(value)[0]].phoneNumber}
+                                                Phone Number:  {value.phoneNumber ? value.phoneNumber : value[Object.keys(value)[0]].phoneNumber}
                                             </Text>
 
                                         </TouchableOpacity>
                                     }
+                                    
 
                                 }}
 
                             />
 
                             :
-                        // <Text>no user </Text>
+                            // <Text>no user </Text>
                             <FlatList data={list}
                                 style={{ height: 530 }}
                                 showsVerticalScrollIndicator={false}
@@ -219,22 +186,17 @@ const Search = ({ route, userName }) => {
 
                                     if (item.item !== null) {
                                         const { item: { _snapshot: { value, key } } } = item
-                                        // const {index} = cardIndex
-                                        // const cardIndex = index
                                         return <TouchableOpacity
                                             onLongPress={() => handleLongPress(key, value.myName)}
                                             style={styles.card}>
                                             {
-                                                console.log(item)
+                                                console.log('eles condoition',item)
                                             }
                                             <View style={{ flexDirection: 'row', }}>
                                                 <Text style={{ color: '#F9F9F9', fontSize: 16, paddingHorizontal: 10, fontWeight: 'bold' }}>Image: </Text>
                                                 <Image style={{ height: 50, width: 50 }} source={{ uri: value.imageURL }} />
                                             </View>
 
-                                            {/* <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-                                            ID: {key}
-                                        </Text> */}
                                             <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
 
                                                 Name:{value.myName}
@@ -254,44 +216,6 @@ const Search = ({ route, userName }) => {
 
 
 
-                    {/* <FlatList data={list}
-                        style={{height:530}}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={item => {
-                            
-                            if (item.item !== null) {
-                                const {item:{_snapshot:{value,key}} } = item
-                                // const {index} = cardIndex
-                                // const cardIndex = index
-                                return <TouchableOpacity
-                                    onLongPress={() => handleLongPress(key, value.myName)}
-                                    style={styles.card}>
-                                        {
-                                            console.log(item)
-                                        }
-                                        <View style={{flexDirection:'row',}}>
-                                        <Text style={{ color: '#F9F9F9', fontSize: 16, paddingHorizontal:10,fontWeight: 'bold' }}>Image: </Text>
-                                    <Image style={{height:50,width:50}} source={{uri: value.imageURL}} />
-                                        </View> */}
-
-                    {/* <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-                                        ID: {key}
-                                    </Text> */}
-                    {/* <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-
-                                        Name: {value.myName}
-                                    </Text>
-
-                                    <Text style={{ color: '#F9F9F9', fontSize: 16, fontWeight: 'bold' }}>
-                                        Phone Number:  {value.phoneNumber}
-                                    </Text>
-
-                                </TouchableOpacity>
-                            }
-
-                        }}
-
-                    />  */}
                 </View>
 
             </View>
@@ -303,8 +227,6 @@ const Search = ({ route, userName }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
         backgroundColor: 'white',
     },
     inputText: {

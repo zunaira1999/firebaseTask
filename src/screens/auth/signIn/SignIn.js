@@ -1,5 +1,3 @@
-
-
 //import liraries
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, SafeAreaView, ActivityIndicator } from 'react-native';
@@ -9,6 +7,7 @@ import auth from '@react-native-firebase/auth';
 //constants
 import { colors } from '../../../constants/colors';
 import FlashMessage from "react-native-flash-message";
+
 //components
 import InputField from '../../../components/InputField';
 import CustomButton from '../../../components/CustomButton';
@@ -116,16 +115,6 @@ const SignIn = ({ navigation }) => {
         </SafeAreaView>
     );
 
-    // return (
-    //     <>
-    //         {/* <TextInput value={code} onChangeText={text => setCode(text)} />
-    //   <Button title="Confirm Code" onPress={() => confirmCode()} /> */}
-    //         <VerifyOTP
-    //         //    value={code} onPress={() => confirmCode()}
-    //         //     onChangeText={text => setCode(text)}
-    //         />
-    //     </>
-    // );
 };
 
 // // define your styles
