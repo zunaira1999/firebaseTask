@@ -103,7 +103,12 @@ const AllUsers = ({ route }) => {
                                         console.log(item)
                                     }
                                     <View style={{ flexDirection: 'row', }}>
-                                        <Text style={{ color: '#F9F9F9', fontSize: 16, paddingHorizontal: 10, fontWeight: 'bold' }}>Image: </Text>
+                                        <Text style={{ 
+                                            color: '#F9F9F9', 
+                                            fontSize: 16, 
+                                            paddingHorizontal: 10, 
+                                            fontWeight: 'bold' 
+                                            }}>Image: </Text>
                                         <Image style={{ height: 50, width: 50 }} source={{ uri: value.imageURL }} />
                                     </View>
 

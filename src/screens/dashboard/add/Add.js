@@ -1,6 +1,11 @@
 //import liraries
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Platform, Image, TouchableOpacity, Alert, SnapshotViewIOSBase } from 'react-native';
+import { View, Text, StyleSheet,
+     Platform,
+      Image,
+       TouchableOpacity, 
+       Alert, SnapshotViewIOSBase
+     } from 'react-native';
 import { profile, logout } from '../../../assets';
 import { colors } from '../../../constants/colors';
 import database from '@react-native-firebase/database';
@@ -29,9 +34,6 @@ const Add = ({ navigation, route, cardIndex }) => {
     const getDatabase = async () => {
         try {
 
-
-            // const index = list.length
-            // const data = await database().ref('todo').once('value');
             const data = await 
             database()
             .ref(`users`)
@@ -46,13 +48,8 @@ const Add = ({ navigation, route, cardIndex }) => {
             })
             
             
-            
-            // tempData => {
-
-            //     setList(tempData.val());
-                
                 console.log( data)
-            // })
+            
 
         } catch (e) {
             console.log(e)
@@ -106,8 +103,6 @@ const Add = ({ navigation, route, cardIndex }) => {
         setUploading(true)
 
         try {
-            // const index = list.length
-            // .child(auth().currentUser.uid)
             await storage().ref(filename).putFile(uploadUri)
             setUploading(false)
 
@@ -162,40 +157,10 @@ const Add = ({ navigation, route, cardIndex }) => {
                 })
 
 
-            // const response = await database().ref(`users/${index}`).set({
-            // const response = await database().ref(`users`)
-            //     .child(auth().currentUser.uid).set({
-            //         myName,
-            //         phoneNumber,
-            //         imageURL: image,
-            //         userId: uid
-            //         //  filename
-            //     })
-
-
-
-
-            // Alert.alert(
-            //     'User Saved',
-            //     'User has been store to the real time database Successfully!'
-            // )
-            // console.log(response)
-            // navigation.navigate(routes.details,{ image: `${imageURL}` })
         } catch (e) {
             console.log(e)
         }
 
-        //   await storage().ref(filename).putFile(uploadUri)
-        //   setUploading(false)
-        //   Alert.alert(
-        //     'Image Uploaded',
-        //     'Your image has been uploaded to the firebase cloud storage Successfully!'
-        //   )
-        // } catch (e) {
-        //   console.log(e)
-        // }
-
-        // setImage(null)
 
 
     }
