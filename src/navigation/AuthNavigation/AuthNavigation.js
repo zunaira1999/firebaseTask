@@ -12,6 +12,7 @@ import Add from '../../screens/dashboard/add/Add';
 import AllUsers from '../../screens/dashboard/allUsers/AllUsers';
 import Search from '../../screens/dashboard/search/Search';
 import Details from '../../screens/auth/signIn/Details';
+import BasicInformation from '../../screens/dashboard/basic information/BasicInformation';
 
 
 const Stack = createNativeStackNavigator()
@@ -35,6 +36,8 @@ const AuthNavigation = () => {
             <Stack.Screen name={routes.allUSers} component={AllUsers} />
             <Stack.Screen name={routes.search} component={Search} />
             <Stack.Screen name={routes.details} component={Details} />
+
+            <Stack.Screen name={routes.basicInformation} component={BasicInformation} />
 
         </Stack.Navigator>
         </>

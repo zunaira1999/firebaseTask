@@ -106,6 +106,10 @@ const SignIn = ({ navigation }) => {
                                 </TouchableOpacity>
 
                             </View>
+
+                            <CustomButton 
+                            onPress={()=>navigation.navigate(routes.basicInformation)}
+                            tittle={'Basic Information'} />
                         </View>
                     </View>
 

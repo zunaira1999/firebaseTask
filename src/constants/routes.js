@@ -6,4 +6,5 @@ export const routes={
     allUSers: 'AllUsers',
     search: 'Search',
     details:'Details',
+    basicInformation:'BasicInformation'
 }
